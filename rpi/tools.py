@@ -1,26 +1,24 @@
 #!/usr/bin/python3
 
-# Author: Connor Czarnuch
+# Copyright (C) 2020  Connor Czarnuch
 #
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
 #
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
 #
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-# THE SOFTWARE.
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import re
+import time
+import urllib.request
+from bs4 import BeautifulSoup
 
 
 def load_config(path="config.cfg"):
@@ -75,9 +73,41 @@ def send_data_to_server(url):
     pass
 
 
-def get_data_from_server():
-    pass
+def get_data_from_server(url):
+    """Retrieves lines of text from a simple php or html file.
+    
+    Arguments:
+        url {str} -- The required server url to download from.
+    
+    Returns:
+        arr[str] -- Array containing text from website.
+    """
+    response = urllib.request.urlopen(url)
+    html = response.read()
+    soup = BeautifulSoup(html, "html.parser")
+    # get text
+    text = soup.get_text()
+    text = text.split('\n')
+    newText = []
+    for line in text:
+        if line != '':
+            newText.append(line.strip())
+    return newText
 
 
-def force_sync_time():
-    pass
+def force_sync_time(unix_time):
+    """Set the raspberry time to the unix time given as parameter.
+    
+    Arguments:
+        unix_time {str} -- The unix time to set the raspberry pi to. Unix time is given in seconds since January 1, 1970.
+    
+    Returns:
+        bool -- Returns false if the time was unable to be set.
+    """
+    try:
+        clk_id = time.CLOCK_REALTIME
+        time.clock_settime(clk_id, float(unix_time))
+    except Exception as e:
+        print("Unable to set clock time.")
+        print(e)
+        return False

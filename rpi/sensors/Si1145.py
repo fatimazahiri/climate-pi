@@ -2,7 +2,8 @@
 
 
 # Author: Connor Czarnuch
-# With use of GrovePi library for Si1145, Adafruit SI1145 library for Arduino, Adafruit_GPIO.I2C & BMP Library by Tony DiCola
+# With use of GrovePi library for Si1145, Adafruit SI1145 library for Arduino,
+# Adafruit_GPIO.I2C & BMP Library by Tony DiCola
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
