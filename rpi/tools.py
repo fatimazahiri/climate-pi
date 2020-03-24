@@ -49,16 +49,16 @@ def load_config(path="config.cfg"):
         return
 
     # If valid, split coordinates into array and store in the dict
-    config = {"gps_coords": gps_coords.split(',')}
+    config = [["gps_coords", gps_coords.split(',')]]
 
     # For each sensor, read line and add to dict
     sensor_data = cfg_file.readline()
     while sensor_data != '':
         line = sensor_data.strip().split(',')
         if len(line) > 1:
-            config[line[0]] = line[1]
+            config.append([line[0], line[1]])
         elif len(line) == 1:
-            config[line[0]] = None
+            config.append([line[0], None])
         sensor_data = cfg_file.readline()
 
     cfg_file.close()
