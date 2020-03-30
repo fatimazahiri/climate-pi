@@ -275,7 +275,7 @@ class SI1145(object):
     def readAll(self, uv=True, vis=True, ir=True, prox=False):
         data = []
         if uv:
-            data.append(self.readUV())
+            data.append(self.readUV() / 100.0)
         if vis:
             data.append(self.readVisible())
         if ir:
