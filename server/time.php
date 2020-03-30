@@ -7,9 +7,10 @@
 <body>
     <?php
         $current_time = time();
-        $next_time = $current_time + (5 * 60);
+        $next_time = $current_time - ($current_time % 300) + 300;
         # Display Unix time and time in 5 minutes.
-        echo $current_time ."\n";
+        echo $current_time . "\n";
+        echo "<br>";
         echo $next_time;
     ?>
 </body>

@@ -17,8 +17,19 @@
 
 import re
 import time
+import importlib
 import urllib.request
+import ntplib
 from bs4 import BeautifulSoup
+
+import os,sys,inspect
+# workaround to import from sensor directory, sorry
+current_dir = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, current_dir+"/sensors")
+
+# import BME680
+import Si1145
+import SMPWM01C
 
 
 def load_config(path="config.cfg"):
@@ -42,27 +53,55 @@ def load_config(path="config.cfg"):
     except IOError as e:
         print("Incorrect file path, does the config file exist?\n")
         print(e)
-    except ValueError as e:
-        print("Incorrect format for GPS coordinates! Are they there? Are they valid?")
-    finally:
         cfg_file.close()
         return
+    except ValueError as e:
+        print("Incorrect format for GPS coordinates! Are they there? Are they valid?")
+        cfg_file.close()
+        return
+        
 
     # If valid, split coordinates into array and store in the dict
-    config = {"gps_coords": gps_coords.split(',')}
+    config = [["gps_coords", gps_coords.split(',')]]
 
     # For each sensor, read line and add to dict
     sensor_data = cfg_file.readline()
     while sensor_data != '':
         line = sensor_data.strip().split(',')
         if len(line) > 1:
-            config[line[0]] = line[1]
+            config.append([line[0], line[1]])
         elif len(line) == 1:
-            config[line[0]] = None
+            config.append([line[0], None])
         sensor_data = cfg_file.readline()
 
     cfg_file.close()
     return config
+
+
+def sensor_switch(sensor, address):
+    sensor_dict = {
+        # "BME680": BME680.create(address),
+        "Si1145": Si1145.create(address),
+        "SMPWM01C": SMPWM01C.create(address)
+    }
+    return sensor_dict.get(sensor)
+
+
+def import_sensors(path="config.cfg"):
+    """Imports sensor libraries and sensor objects from a config file.
+    
+    Returns:
+        [list, list] -- Two lists of modules and sensor objects.
+    """
+    sensorList = []
+    config = load_config(path)
+    for i, item in enumerate(config):
+        if i == 0:
+            continue
+        else:
+            addr = int(item[1], 16)
+            sensorList.append(sensor_switch(item[0], addr))
+    return sensorList
 
 
 def format_array():
