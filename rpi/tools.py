@@ -98,6 +98,8 @@ def import_sensors(path="config.cfg"):
     for i, item in enumerate(config):
         if i == 0:
             continue
+        elif item[0][0] == "#":
+            continue
         else:
             addr = int(item[1], 16)
             sensorList.append(sensor_switch(item[0], addr))
