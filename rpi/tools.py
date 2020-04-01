@@ -19,7 +19,7 @@ import re
 import time
 import importlib
 import urllib.request
-import ntplib
+import requests
 from bs4 import BeautifulSoup
 
 import os,sys,inspect
@@ -106,12 +106,33 @@ def import_sensors(path="config.cfg"):
     return sensorList
 
 
-def format_array():
-    pass
+def format_dict(dictList):
+    """Takes in a list of dictionaries and returns a signle dictionary will all entries.
+    
+    Arguments:
+        dictList {[dict]} -- List of dictionaries.
+    
+    Returns:
+        dict -- Super dictionary.
+    """
+    newDict = {}
+    for i in dictList:
+        newDict.update(i)
+    return newDict
 
 
-def send_data_to_server(url):
-    pass
+def send_data_to_server(url, data):
+    """Send post data to server at url.
+    
+    Arguments:
+        url {str} -- The url to send data object to.
+        data {dict} -- Dictionary containing keys and values to send to server.
+    
+    Returns:
+        str -- Response code pertaining to data send.
+    """
+    response = requests.post(url, data=data)
+    return response
 
 
 def get_data_from_server(url):

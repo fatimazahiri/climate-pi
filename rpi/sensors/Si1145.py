@@ -272,16 +272,16 @@ class SI1145(object):
     def readProx(self):
         return self._device.readU16LE(0x26)
 
-    def readAll(self, uv=True, vis=True, ir=True, prox=False):
-        data = []
+    def readAll(self, uv=True, vis=False, ir=False, prox=False):
+        data = {}
         if uv:
-            data.append(self.readUV() / 100.0)
+            data['uv_index'] = self.readUV() / 100.0
         if vis:
-            data.append(self.readVisible())
+            data['visible'] = self.readVisible()
         if ir:
-            data.append(self.readIR())
+            data['ir'] = self.readIR()
         if prox:
-            data.append(self.readProx())
+            data['proximity'] = self.readProx()
         return data
 
     # Returns true is test pass, false if test fail
