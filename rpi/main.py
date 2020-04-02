@@ -21,28 +21,38 @@ import tools
 
 
 CONFIG_FILE = os.getcwd() + '/config.cfg'
-ADD_DATA_URL = 'http://localhost/add_data.php'
+ADD_DATA_URL = 'http://serverpi/add_data.php'
 
 
 def main():
-    sensorList = tools.import_sensors()
+    config = tools.load_config(CONFIG_FILE)
+    print(config)
+    device_info = {
+        'device_id': config[0][1],
+        'location': config[1][1].split(',')
+        }
+    sensorList = tools.import_sensors(config)
 
     nextTime = int(get_new_time())
+    print(int(time.time()), nextTime)
 
     while True:
         while time.time() < nextTime:
             continue
-        
+
         # Read and format sensor data
         data = read_from_all(sensorList)
-        dataToSend = tools.format_dict(data)
+        dataToSend = (device_info)
+        dataToSend.update({'time': nextTime})
+        dataToSend.update(tools.format_dict(data))
 
         # Send data to server
         print(dataToSend)
-        tools.send_data_to_server(ADD_DATA_URL, dataToSend)
+        print(tools.send_data_to_server(ADD_DATA_URL, dataToSend))
 
         # Calculate next time to retrieve information
         nextTime = int(get_new_time())
+        print(int(time.time()), nextTime)
 
         # sync from time server
 
