@@ -21,3 +21,5 @@ create table data(
 
 -- Can change password
 create user 'raspberrypi'@'localhost' identified by 'raspberry';
+grant all privileges on climatedb.* to 'raspberrypi'@'localhost' identified by 'raspberry';
+flush privileges;
