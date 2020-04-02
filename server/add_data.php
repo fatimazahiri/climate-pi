@@ -50,10 +50,32 @@ if($mysqli -> connect_errno) {
 
 $mysqli -> select_db($db_name);
 
+
+$device_str = "device_id, time";
+$data_str = "'$device_id', '$time'";
+
+if ($temperature != NULL) {
+    $device_str .= ", temperature";
+    $data_str .= ", '$temperature'";
+}
+if ($humidity != NULL) {
+    $device_str .= ", humidity";
+    $data_str .= ", '$humidity'";
+}
+if ($pressure != NULL) {
+    $device_str .= ", pressure";
+    $data_str .= ", '$pressure'";
+}
+if ($uv_index != NULL) {
+    $device_str .= ", uv_index";
+    $data_str .= ", '$uv_index'";
+}
+
+
 $sql = "INSERT INTO data ".
-    "(device_id, time, temperature, humidity, pressure, uv_index)".
+    "(" . $device_str . ")".
     "VALUES".
-    "('$device_id', '$time', '$temperature', '$humidity', '$pressure', '$uv_index')";
+    "(" . $data_str  . ")";
 
 if ($mysqli -> query($sql) == TRUE) {
     echo "New record created successfully";
