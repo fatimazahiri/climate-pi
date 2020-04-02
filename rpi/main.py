@@ -21,6 +21,7 @@ import tools
 
 
 CONFIG_FILE = os.getcwd() + '/config.cfg'
+ADD_DATA_URL = 'http://localhost/add_data.php'
 
 
 def main():
@@ -31,11 +32,16 @@ def main():
     while True:
         while time.time() < nextTime:
             continue
-
+        
+        # Read and format sensor data
         data = read_from_all(sensorList)
+        dataToSend = tools.format_dict(data)
 
-        print(data) # like sending data to server for now
+        # Send data to server
+        print(dataToSend)
+        tools.send_data_to_server(ADD_DATA_URL, dataToSend)
 
+        # Calculate next time to retrieve information
         nextTime = int(get_new_time())
 
         # sync from time server
