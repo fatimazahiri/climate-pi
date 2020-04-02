@@ -25,12 +25,25 @@ $db_username = 'raspberrypi';
 $db_password = 'raspberry';
 $db_name = 'climatedb';
 
-mysql_connect( $db_host, $db_username, $db_password) or die(mysql_error());
-mysql_select_db($db_name);
+$mysqli = new mysqli($db_host, $db_username, $db_password);
 
-mysql_query("INSERT INTO data (
-            device_id, time, temperature, humidity, pressure, uv_index)
-            VALUES
-            ($device_id, $time, $temperature, $humidity, $pressure, $uv_index)")
-or die(mysql_error());
+if($mysqli -> connect_errno) {
+    echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
+    exit();
+}
+
+$mysqli -> select_db($db_name);
+
+$sql = "INSERT INTO data ".
+    "(device_id, time, temperature, humidity, pressure, uv_index)".
+    "VALUES".
+    "('$device_id', '$time', '$temperature', '$humidity', '$pressure', '$uv_index')";
+
+if ($mysqli -> query($sql) == TRUE) {
+    echo "New record created successfully";
+} else {
+    echo "Error: " . $sql . "<br>" . $mysqli -> error;
+}
+
+$mysqli ->close();
 ?>
