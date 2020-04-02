@@ -43,6 +43,7 @@ def load_config(path="config.cfg"):
     """
     try:
         cfg_file = open(path, 'r', encoding="utf-8")
+        device_id = cfg_file.readline().strip()
         gps_coords = cfg_file.readline().strip()
         # Match the first read line with a regular expression for valid GPS coordinates
         prog = re.match("^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$",
@@ -62,7 +63,7 @@ def load_config(path="config.cfg"):
         
 
     # If valid, split coordinates into array and store in the dict
-    config = [["gps_coords", gps_coords]]
+    config = [["device_id", device_id], ["gps_coords", gps_coords]]
 
     # For each sensor, read line and add to dict
     sensor_data = cfg_file.readline()
@@ -102,7 +103,7 @@ def import_sensors(config):
     """
     sensorList = []
     for i, item in enumerate(config):
-        if i == 0:
+        if i in (0, 1):
             continue
         elif item[0][0] == "#":
             continue

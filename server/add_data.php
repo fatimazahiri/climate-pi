@@ -12,7 +12,7 @@ function ExtendedAddslash(&$params)
 // Initialize ExtendedAddslash() function for every $_POST variable
 ExtendedAddslash($_POST);
 
-$submission_id = $_POST['submission_id'];
+$device_id =$_POST['device_id'];
 $location =$_POST['location'][0] .", ". $_POST['location'][1];
 $time =$_POST['time'];
 $temperature =$_POST['temperature'];
@@ -29,8 +29,8 @@ mysql_connect( $db_host, $db_username, $db_password) or die(mysql_error());
 mysql_select_db($db_name);
 
 mysql_query("INSERT INTO data (
-            location, time, temperature, humidity, pressure, uv_index)
+            device_id, time, temperature, humidity, pressure, uv_index)
             VALUES
-            ($location, $time, $temperature, $humidity, $pressure, $uv_index)")
+            ($device_id, $time, $temperature, $humidity, $pressure, $uv_index)")
 or die(mysql_error());
 ?>
