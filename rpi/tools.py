@@ -62,7 +62,7 @@ def load_config(path="config.cfg"):
         
 
     # If valid, split coordinates into array and store in the dict
-    config = [["gps_coords", gps_coords.split(',')]]
+    config = [["gps_coords", gps_coords]]
 
     # For each sensor, read line and add to dict
     sensor_data = cfg_file.readline()
@@ -70,8 +70,6 @@ def load_config(path="config.cfg"):
         line = sensor_data.strip().split(',')
         if len(line) > 1:
             config.append([line[0], line[1]])
-        elif len(line) == 1:
-            config.append([line[0], None])
         sensor_data = cfg_file.readline()
 
     cfg_file.close()
@@ -79,6 +77,15 @@ def load_config(path="config.cfg"):
 
 
 def sensor_switch(sensor, address):
+    """Switch statement for all compatible sensors. Input the sensor name and I2C address, it will return an object of that sensor.
+    
+    Arguments:
+        sensor {str} -- String containing the name of the sensor.
+        address {int} -- Integer representing the I2C address of the sensor.
+    
+    Returns:
+        Object -- Object containing the sensor data.
+    """
     sensor_dict = {
         # "BME680": BME680.create(address),
         "Si1145": Si1145.create(address),
@@ -87,14 +94,13 @@ def sensor_switch(sensor, address):
     return sensor_dict.get(sensor)
 
 
-def import_sensors(path="config.cfg"):
+def import_sensors(config):
     """Imports sensor libraries and sensor objects from a config file.
     
     Returns:
         [list, list] -- Two lists of modules and sensor objects.
     """
     sensorList = []
-    config = load_config(path)
     for i, item in enumerate(config):
         if i == 0:
             continue

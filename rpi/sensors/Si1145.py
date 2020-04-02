@@ -293,8 +293,8 @@ class SI1145(object):
             return False
 
 
-def create(address=SI1145_ADDR, i2c_ch=I2C_CHANNEL):
-    sensor = SI1145(address=address, i2c_ch=i2c_ch)
+def create(i2c_address=SI1145_ADDR, i2c_channel=I2C_CHANNEL):
+    sensor = SI1145(i2c_address, i2c_channel)
     if not sensor.test():
         raise Exception
     return sensor
