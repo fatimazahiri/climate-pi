@@ -139,7 +139,7 @@ def send_data_to_server(url, data):
         str -- Response code pertaining to data send.
     """
     response = requests.post(url, data=data)
-    return response
+    return response.text
 
 
 def get_data_from_server(url):
