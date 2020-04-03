@@ -18,18 +18,22 @@ create database climatedb;
 use climatedb;
 
 create table device(
-    device_id varchar(5) not null,
-    device_location varchar(24) not null,
+    device_id char(5) not null,
+    latitude varchar(12) not null,
+    longitude varchar(12) not null,
     primary key (device_id)
 );
 
 create table data(
-    device_id varchar(5) not null,
+    device_id char(5) not null,
     time int not null,
     temperature float,
     humidity float,
     pressure float,
+    gas float,
     uv_index float,
+    pm_25 float,
+    pm_10 float,
     primary key (device_id, time),
     foreign key (device_id) references device(device_id) on delete cascade
 );

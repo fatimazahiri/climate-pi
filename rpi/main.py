@@ -20,7 +20,8 @@ import time
 import tools
 
 
-CONFIG_FILE = os.getcwd() + '/config.cfg'
+CONFIG_FILE = os.getcwd() + '/config.json'
+REGISTER_DEVICE_URL = 'http://serverpi/register_device.php'
 ADD_DATA_URL = 'http://serverpi/add_data.php'
 
 
@@ -28,9 +29,19 @@ def main():
     config = tools.load_config(CONFIG_FILE)
     print(config)
     device_info = {
-        'device_id': config[0][1],
-        'location': config[1][1].split(',')
+        "device_id": config["device_id"],
+        "latitude": config["latitude"],
+        "longitude": config["longitude"]
         }
+        
+    # Register device with database
+    print(tools.send_data_to_server(REGISTER_DEVICE_URL, device_info))
+
+    # Remove positional variables as they are no longer needed
+    device_info.pop("latitude")
+    device_info.pop("longitude")
+
+    # Import sensor objects
     sensorList = tools.import_sensors(config)
 
     nextTime = int(get_new_time())

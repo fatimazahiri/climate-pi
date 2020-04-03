@@ -29,14 +29,8 @@ function ExtendedAddslash(&$params)
 ExtendedAddslash($_POST);
 
 $device_id =$_POST['device_id'];
-$time =$_POST['time'];
-$temperature =$_POST['temperature'];
-$humidity =$_POST['humidity'];
-$pressure =$_POST['pressure'];
-$gas =$_POST['gas'];
-$uv_index =$_POST['uv_index'];
-$pm_25 =$_POST['pm_25'];
-$pm_10 =$_POST['pm_10'];
+$latitude =$_POST['latitude'];
+$longitude =$_POST['longitude'];
 
 $db_host = 'localhost';
 $db_username = 'raspberrypi';
@@ -52,47 +46,24 @@ if($mysqli -> connect_errno) {
 
 $mysqli -> select_db($db_name);
 
-$device_str = "device_id, time";
-$data_str = "'$device_id', '$time'";
+$rows = $mysqli -> query("SELECT * FROM device WHERE device_id = '$device_id'");
 
-if ($temperature != NULL) {
-    $device_str .= ", temperature";
-    $data_str .= ", '$temperature'";
-}
-if ($humidity != NULL) {
-    $device_str .= ", humidity";
-    $data_str .= ", '$humidity'";
-}
-if ($pressure != NULL) {
-    $device_str .= ", pressure";
-    $data_str .= ", '$pressure'";
-}
-if ($gas != NULL) {
-    $device_str .= ", gas";
-    $data_str .= ", '$gas'";
-}
-if ($uv_index != NULL) {
-    $device_str .= ", uv_index";
-    $data_str .= ", '$uv_index'";
-}
-if ($pm_25 != NULL) {
-    $device_str .= ", pm_25";
-    $data_str .= ", '$pm_25'";
-}
-if ($pm_10 != NULL) {
-    $device_str .= ", pm_10";
-    $data_str .= ", '$pm_10'";
-}
-
-$sql = "INSERT INTO data ".
-    "(" . $device_str . ")".
-    "VALUES".
-    "(" . $data_str  . ")";
-
-if ($mysqli -> query($sql) == TRUE) {
-    echo "New record created successfully";
+if ($rows->num_rows > 0) {
+    echo "Device already exists.";
 } else {
-    echo "Error: " . $sql . "<br>" . $mysqli -> error;
+    $device_str = "device_id, latitude, longitude";
+    $data_str = "'$device_id', '$latitude', '$longitude'";
+
+    $sql = "INSERT INTO device ".
+        "(" . $device_str . ")".
+        "VALUES".
+        "(" . $data_str  . ")";
+
+    if ($mysqli -> query($sql) == TRUE) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $mysqli -> error;
+    }
 }
 
 $mysqli ->close();
