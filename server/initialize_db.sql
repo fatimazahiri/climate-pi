@@ -19,8 +19,8 @@ use climatedb;
 
 create table device(
     device_id char(5) not null,
-    latitude float not null,
-    longitude float not null,
+    latitude varchar(12) not null,
+    longitude varchar(12) not null,
     primary key (device_id)
 );
 
