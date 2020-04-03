@@ -37,6 +37,11 @@ def main():
     # Register device with database
     print(tools.send_data_to_server(REGISTER_DEVICE_URL, device_info))
 
+    # Remove positional variables as they are no longer needed
+    device_info.pop("latitude")
+    device_info.pop("longitude")
+
+    # Import sensor objects
     sensorList = tools.import_sensors(config)
 
     nextTime = int(get_new_time())
