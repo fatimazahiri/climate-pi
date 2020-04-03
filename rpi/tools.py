@@ -46,11 +46,17 @@ def load_config(path="config.json"):
             device_id = data["device_id"]
             latitude = data["latitude"]
             longitude = data["longitude"]
-            # Check if GPS coordinates are valid
+            # Validate config
+            device_id_check = 0 <= device_id <= 99999
             lat_check = -90 <= latitude <= 90
             long_check = -180 <= longitude <= 180
-            if not lat_check or not long_check:
+            if not device_id_check or not lat_check or not long_check:
                 raise ValueError
+
+            # Format config entries
+            device_id = ("%05d" % device_id)
+            latitude = ("%.6f" % latitude)
+            longitude = ("%.6f" % longitude)
 
             # If valid, split coordinates into array and store in the dict
             config = {
@@ -71,7 +77,7 @@ def load_config(path="config.json"):
         print(e)
         return
     except ValueError as e:
-        print("Incorrect format for GPS coordinates! Are they there? Are they valid?")
+        print("Incorrect format for device_id or GPS coordinates! Are they there? Are they valid?")
         return
 
 

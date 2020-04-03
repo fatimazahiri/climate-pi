@@ -28,7 +28,6 @@ function ExtendedAddslash(&$params)
 // Initialize ExtendedAddslash() function for every $_POST variable
 ExtendedAddslash($_POST);
 
-
 $device_id =$_POST['device_id'];
 $latitude =$_POST['latitude'];
 $longitude =$_POST['longitude'];

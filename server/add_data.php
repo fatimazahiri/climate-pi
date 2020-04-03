@@ -28,7 +28,6 @@ function ExtendedAddslash(&$params)
 // Initialize ExtendedAddslash() function for every $_POST variable
 ExtendedAddslash($_POST);
 
-
 $device_id =$_POST['device_id'];
 $latitude =$_POST['latitude'];
 $longitude =$_POST['longitude'];
@@ -54,7 +53,6 @@ if($mysqli -> connect_errno) {
 }
 
 $mysqli -> select_db($db_name);
-
 
 $device_str = "device_id, time";
 $data_str = "'$device_id', '$time'";
@@ -87,8 +85,6 @@ if ($pm_10 != NULL) {
     $device_str .= ", pm_10";
     $data_str .= ", '$pm_10'";
 }
-
-
 
 $sql = "INSERT INTO data ".
     "(" . $device_str . ")".
