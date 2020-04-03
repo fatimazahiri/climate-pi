@@ -6,10 +6,6 @@
         {
             "name": "Si1145",
             "address": "0x60"
-        },
-        {
-            "name": "SMPWM01C",
-            "address": "0x00"
         }
     ]
 }
