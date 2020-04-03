@@ -8,6 +8,9 @@ sudo apt-get install apache2 -y
 echo "Install PHP"
 sudo apt-get install php -y
 
+echo "Move files to apache file location"
+sudo cp server/*.php /var/www/html
+
 echo "Install MySQL"
 sudo apt-get install mariadb-server php-mysql -y
 
