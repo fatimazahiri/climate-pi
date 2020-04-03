@@ -30,12 +30,16 @@ ExtendedAddslash($_POST);
 
 
 $device_id =$_POST['device_id'];
-$location =$_POST['location'][0] .", ". $_POST['location'][1];
+$latitude =$_POST['location'][0];
+$longitude =$_POST['location'][1];
 $time =$_POST['time'];
 $temperature =$_POST['temperature'];
 $humidity =$_POST['humidity'];
 $pressure =$_POST['pressure'];
+$gas =$_POST['gas'];
 $uv_index =$_POST['uv_index'];
+$pm_25 =$_POST['pm_25'];
+$pm_10 =$_POST['pm_10'];
 
 $db_host = 'localhost';
 $db_username = 'raspberrypi';
@@ -67,10 +71,23 @@ if ($pressure != NULL) {
     $device_str .= ", pressure";
     $data_str .= ", '$pressure'";
 }
+if ($gas != NULL) {
+    $device_str .= ", gas";
+    $data_str .= ", '$gas'";
+}
 if ($uv_index != NULL) {
     $device_str .= ", uv_index";
     $data_str .= ", '$uv_index'";
 }
+if ($pm_25 != NULL) {
+    $device_str .= ", pm_25";
+    $data_str .= ", '$pm_25'";
+}
+if ($pm_10 != NULL) {
+    $device_str .= ", pm_10";
+    $data_str .= ", '$pm_10'";
+}
+
 
 
 $sql = "INSERT INTO data ".

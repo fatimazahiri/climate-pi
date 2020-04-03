@@ -19,7 +19,8 @@ use climatedb;
 
 create table device(
     device_id varchar(5) not null,
-    device_location varchar(24) not null,
+    latitude varchar(12) not null,
+    longitude varchar(12) not null,
     primary key (device_id)
 );
 
@@ -29,7 +30,10 @@ create table data(
     temperature float,
     humidity float,
     pressure float,
+    gas float,
     uv_index float,
+    pm_25 float,
+    pm_10 float,
     primary key (device_id, time),
     foreign key (device_id) references device(device_id) on delete cascade
 );
@@ -38,3 +42,5 @@ create table data(
 create user 'raspberrypi'@'localhost' identified by 'raspberry';
 grant all privileges on climatedb.* to 'raspberrypi'@'localhost' identified by 'raspberry';
 flush privileges;
+
+quit;
