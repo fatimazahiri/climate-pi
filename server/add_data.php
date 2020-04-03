@@ -29,8 +29,6 @@ function ExtendedAddslash(&$params)
 ExtendedAddslash($_POST);
 
 $device_id =$_POST['device_id'];
-$latitude =$_POST['latitude'];
-$longitude =$_POST['longitude'];
 $time =$_POST['time'];
 $temperature =$_POST['temperature'];
 $humidity =$_POST['humidity'];
