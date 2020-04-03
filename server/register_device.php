@@ -1,20 +1,20 @@
-<!-- Copyright (C) 2020  Connor Czarnuch
-
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program.  If not, see <https://www.gnu.org/licenses/>. -->
-
-
 <?php
+// Copyright (C) 2020  Connor Czarnuch
+
+// This program is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+
+// You should have received a copy of the GNU General Public License
+// along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 // This function will run within each post array including multi-dimensional arrays
 function ExtendedAddslash(&$params)
 {
@@ -30,8 +30,8 @@ ExtendedAddslash($_POST);
 
 
 $device_id =$_POST['device_id'];
-$latitude =$_POST['location'][0];
-$longitude =$_POST['location'][1];
+$latitude =$_POST['latitude'];
+$longitude =$_POST['longitude'];
 
 $db_host = 'localhost';
 $db_username = 'raspberrypi';
@@ -47,9 +47,9 @@ if($mysqli -> connect_errno) {
 
 $mysqli -> select_db($db_name);
 
-$exists = $mysqli -> query("SELECT COUNT(*) FROM device WHERE device_id = '$device_id'");
+$rows = $mysqli -> query("SELECT * FROM device WHERE device_id = '$device_id'");
 
-if ($exists >= 1) {
+if ($rows->num_rows > 0) {
     echo "Device already exists.";
 } else {
     $device_str = "device_id, latitude, longitude";
