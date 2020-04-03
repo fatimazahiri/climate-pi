@@ -1,0 +1,15 @@
+{
+    "device_id": 99999,
+    "latitude": 43.258687,
+    "longitude": -79.919961,
+    "sensors": [
+        {
+            "name": "Si1145",
+            "address": "0x60"
+        },
+        {
+            "name": "SM-PWM-01C",
+            "address": null
+        }
+    ]
+}

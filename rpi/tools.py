@@ -15,14 +15,13 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import re
+import json
 import time
-import importlib
 import urllib.request
 import requests
 from bs4 import BeautifulSoup
 
-import os,sys,inspect
+import os,sys
 # workaround to import from sensor directory, sorry
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir+"/sensors")
@@ -42,39 +41,38 @@ def load_config(path="config.cfg"):
         dict -- Dictionary containing the raspberry pi configuration.
     """
     try:
-        cfg_file = open(path, 'r', encoding="utf-8")
-        device_id = cfg_file.readline().strip()
-        gps_coords = cfg_file.readline().strip()
-        # Match the first read line with a regular expression for valid GPS coordinates
-        prog = re.match("^[-+]?([1-8]?\d(\.\d+)?|90(\.0+)?),\s*[-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?)$",
-                        gps_coords)
-        if not prog:
-            raise ValueError
+        with open(path, 'r') as cfg_file:
+            data = json.load(cfg_file)
+            device_id = data["device_id"]
+            latitude = data["latitude"]
+            longitude = data["longitude"]
+            # Check if GPS coordinates are valid
+            lat_check = -90 <= latitude <= 90
+            long_check = -180 <= longitude <= 180
+            if not lat_check or not long_check:
+                raise ValueError
+
+            # If valid, split coordinates into array and store in the dict
+            config = {
+                "device_id": device_id, 
+                "latitude": latitude,
+                "longitude": longitude
+            }
+
+            # For each sensor, read line and add to dict
+            sensor_data = data["sensors"]
+            for sensor in sensor_data:
+                config.update({sensor["name"]: sensor["address"]})
+
+            return config
 
     except IOError as e:
         print("Incorrect file path, does the config file exist?\n")
         print(e)
-        cfg_file.close()
         return
     except ValueError as e:
         print("Incorrect format for GPS coordinates! Are they there? Are they valid?")
-        cfg_file.close()
         return
-        
-
-    # If valid, split coordinates into array and store in the dict
-    config = [["device_id", device_id], ["gps_coords", gps_coords]]
-
-    # For each sensor, read line and add to dict
-    sensor_data = cfg_file.readline()
-    while sensor_data != '':
-        line = sensor_data.strip().split(',')
-        if len(line) > 1:
-            config.append([line[0], line[1]])
-        sensor_data = cfg_file.readline()
-
-    cfg_file.close()
-    return config
 
 
 def sensor_switch(sensor, address):
@@ -102,14 +100,12 @@ def import_sensors(config):
         [list, list] -- Two lists of modules and sensor objects.
     """
     sensorList = []
-    for i, item in enumerate(config):
-        if i in (0, 1):
-            continue
-        elif item[0][0] == "#":
+    for key in config.keys():
+        if key in ("device_id", "latitude", "longitude"):
             continue
         else:
-            addr = int(item[1], 16)
-            sensorList.append(sensor_switch(item[0], addr))
+            addr = int(config[key], 16)
+            sensorList.append(sensor_switch(key, addr))
     return sensorList
 
 

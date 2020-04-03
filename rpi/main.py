@@ -28,8 +28,9 @@ def main():
     config = tools.load_config(CONFIG_FILE)
     print(config)
     device_info = {
-        'device_id': config[0][1],
-        'location': config[1][1].split(',')
+        "device_id": config["device_id"],
+        "latitude": config["latitide"],
+        "longitude": config["longitude"]
         }
     sensorList = tools.import_sensors(config)
 
