@@ -30,7 +30,8 @@ ExtendedAddslash($_POST);
 
 
 $device_id =$_POST['device_id'];
-$device_location =$_POST['location'][0] .", ". $_POST['location'][1];
+$latitude =$_POST['location'][0];
+$longitude =$_POST['location'][1];
 
 $db_host = 'localhost';
 $db_username = 'raspberrypi';
@@ -46,19 +47,24 @@ if($mysqli -> connect_errno) {
 
 $mysqli -> select_db($db_name);
 
+$exists = $mysqli -> query("SELECT COUNT(*) FROM device WHERE device_id = '$device_id'");
 
-$device_str = "device_id, device_location";
-$data_str = "'$device_id', '$device_location'";
-
-$sql = "INSERT INTO device ".
-    "(" . $device_str . ")".
-    "VALUES".
-    "(" . $data_str  . ")";
-
-if ($mysqli -> query($sql) == TRUE) {
-    echo "New record created successfully";
+if ($exists >= 1) {
+    echo "Device already exists.";
 } else {
-    echo "Error: " . $sql . "<br>" . $mysqli -> error;
+    $device_str = "device_id, latitude, longitude";
+    $data_str = "'$device_id', '$latitude', '$longitude'";
+
+    $sql = "INSERT INTO device ".
+        "(" . $device_str . ")".
+        "VALUES".
+        "(" . $data_str  . ")";
+
+    if ($mysqli -> query($sql) == TRUE) {
+        echo "New record created successfully";
+    } else {
+        echo "Error: " . $sql . "<br>" . $mysqli -> error;
+    }
 }
 
 $mysqli ->close();
