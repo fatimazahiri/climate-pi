@@ -12,7 +12,7 @@ echo "Install MySQL"
 sudo apt-get install mariadb-server php-mysql -y
 
 echo "Running MySQL config..."
-sudo mysql-secure-installation
+sudo mysql_secure_installation
 
 echo "Initialize database"
 mysql -u root -p < server/initialize_db.sql

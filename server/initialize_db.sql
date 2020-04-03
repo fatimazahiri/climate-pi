@@ -42,5 +42,3 @@ create table data(
 create user 'raspberrypi'@'localhost' identified by 'raspberry';
 grant all privileges on climatedb.* to 'raspberrypi'@'localhost' identified by 'raspberry';
 flush privileges;
-
-quit;
