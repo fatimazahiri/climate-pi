@@ -30,12 +30,7 @@ ExtendedAddslash($_POST);
 
 
 $device_id =$_POST['device_id'];
-$location =$_POST['location'][0] .", ". $_POST['location'][1];
-$time =$_POST['time'];
-$temperature =$_POST['temperature'];
-$humidity =$_POST['humidity'];
-$pressure =$_POST['pressure'];
-$uv_index =$_POST['uv_index'];
+$device_location =$_POST['location'][0] .", ". $_POST['location'][1];
 
 $db_host = 'localhost';
 $db_username = 'raspberrypi';
@@ -52,28 +47,10 @@ if($mysqli -> connect_errno) {
 $mysqli -> select_db($db_name);
 
 
-$device_str = "device_id, time";
-$data_str = "'$device_id', '$time'";
+$device_str = "device_id, device_location";
+$data_str = "'$device_id', '$device_location'";
 
-if ($temperature != NULL) {
-    $device_str .= ", temperature";
-    $data_str .= ", '$temperature'";
-}
-if ($humidity != NULL) {
-    $device_str .= ", humidity";
-    $data_str .= ", '$humidity'";
-}
-if ($pressure != NULL) {
-    $device_str .= ", pressure";
-    $data_str .= ", '$pressure'";
-}
-if ($uv_index != NULL) {
-    $device_str .= ", uv_index";
-    $data_str .= ", '$uv_index'";
-}
-
-
-$sql = "INSERT INTO data ".
+$sql = "INSERT INTO device ".
     "(" . $device_str . ")".
     "VALUES".
     "(" . $data_str  . ")";
