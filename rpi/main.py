@@ -20,7 +20,7 @@ import time
 import tools
 
 
-CONFIG_FILE = os.getcwd() + '/config.cfg'
+CONFIG_FILE = os.getcwd() + '/config.json'
 ADD_DATA_URL = 'http://serverpi/add_data.php'
 
 
@@ -29,7 +29,7 @@ def main():
     print(config)
     device_info = {
         "device_id": config["device_id"],
-        "latitude": config["latitide"],
+        "latitude": config["latitude"],
         "longitude": config["longitude"]
         }
     sensorList = tools.import_sensors(config)

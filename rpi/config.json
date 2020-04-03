@@ -8,8 +8,8 @@
             "address": "0x60"
         },
         {
-            "name": "SM-PWM-01C",
-            "address": null
+            "name": "SMPWM01C",
+            "address": "0x00"
         }
     ]
 }

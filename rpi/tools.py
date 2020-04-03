@@ -31,7 +31,7 @@ import Si1145
 import SMPWM01C
 
 
-def load_config(path="config.cfg"):
+def load_config(path="config.json"):
     """Load the GPS coordinates and I2C sensor data for the raspberry pi, returning the result as a dictionary.
 
     Keyword Arguments:
@@ -86,11 +86,12 @@ def sensor_switch(sensor, address):
         Object -- Object containing the sensor data.
     """
     sensor_dict = {
-        # "BME680": BME680.create(address),
-        "Si1145": Si1145.create(address),
-        "SMPWM01C": SMPWM01C.create(address)
+        # "BME680": BME680,
+        "Si1145": Si1145,
+        "SMPWM01C": SMPWM01C
     }
-    return sensor_dict.get(sensor)
+    sensor = sensor_dict.get(sensor)
+    return sensor.create(address)
 
 
 def import_sensors(config):
