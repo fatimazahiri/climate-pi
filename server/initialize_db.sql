@@ -17,15 +17,19 @@ create database climatedb;
 
 use climatedb;
 
-create table device(
+create table device
+(
     device_id char(5) not null,
+    passkey_hash char(16) not null,
     latitude varchar(12) not null,
     longitude varchar(12) not null,
     primary key (device_id)
 );
 
-create table data(
+create table data
+(
     device_id char(5) not null,
+    passkey_hash char(16) not null,
     time int not null,
     temperature float,
     humidity float,
@@ -35,7 +39,8 @@ create table data(
     pm_25 float,
     pm_10 float,
     primary key (device_id, time),
-    foreign key (device_id) references device(device_id) on delete cascade
+    foreign key (device_id) references device(device_id) on delete cascade,
+    foreign key (passkey_hash) references device(passkey_hash) on delete cascade
 );
 
 -- Can change password

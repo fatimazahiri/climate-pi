@@ -30,11 +30,12 @@ def main():
     print(config)
     device_info = {
         "device_id": config["device_id"],
+        "passkey_hash": config["passkey_hash"],
         "latitude": config["latitude"],
         "longitude": config["longitude"]
-        }
-        
-    # Register device with database
+    }
+
+    # Check if device is registered
     print(tools.send_data_to_server(REGISTER_DEVICE_URL, device_info))
 
     # Remove positional variables as they are no longer needed
@@ -70,10 +71,10 @@ def main():
 
 def read_from_all(sensorList):
     """Iteratively read data from a list of sensor objects.
-    
+
     Arguments:
         sensorList {Array of sensor Objects} -- A list containing an object for each of the sensors found in the config file.
-    
+
     Returns:
         Array -- Multi-dimensional array containing the data read by the sensors.
     """
@@ -85,10 +86,10 @@ def read_from_all(sensorList):
 
 def get_new_time(interval=300):
     """Calculate the next time based on the time interval given.
-    
+
     Keyword Arguments:
         interval {int} -- The number of seconds between each interval. (default: {300})
-    
+
     Returns:
         int -- Next time based on interval in Unix format.
     """
