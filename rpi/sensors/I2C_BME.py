@@ -181,17 +181,18 @@ class Adafruit_BME680:
         self._min_refresh_time = 1 / refresh_rate
 
     def readAll(self, temp=True, gas=True, humidity=True, pressure=False, altitude=False):
-        data = []
+        data = {}
         if temp:
-            data.append(self.temperature)
+            data['temp'] = self.temperature
         if gas:
-            data.append(self.gas)
+            data['gas'] = self.gas()
         if humidity:
-            data.append(self.humidity)
+            data['humidity'] = self.humidity
         if pressure:
-            data.append(self.pressure)
+            daata['pressure'] = self.pressure
         if altitude:
-            data.append(self.altitude)
+            data['altitude'] = self.altitude
+        return data
 
 
     #Returns true if the sensor is functioning
