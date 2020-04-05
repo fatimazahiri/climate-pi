@@ -17,14 +17,17 @@ create database climatedb;
 
 use climatedb;
 
-create table device(
+create table device
+(
     device_id char(5) not null,
+    passkey_hash char(64) not null,
     latitude varchar(12) not null,
     longitude varchar(12) not null,
     primary key (device_id)
 );
 
-create table data(
+create table data
+(
     device_id char(5) not null,
     time int not null,
     temperature float,

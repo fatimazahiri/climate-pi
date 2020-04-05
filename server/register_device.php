@@ -29,6 +29,7 @@ function ExtendedAddslash(&$params)
 ExtendedAddslash($_POST);
 
 $device_id =$_POST['device_id'];
+$passkey_hash = $_POST['passkey_hash'];
 $latitude =$_POST['latitude'];
 $longitude =$_POST['longitude'];
 
@@ -49,10 +50,10 @@ $mysqli -> select_db($db_name);
 $rows = $mysqli -> query("SELECT * FROM device WHERE device_id = '$device_id'");
 
 if ($rows->num_rows > 0) {
-    echo "Device already exists.";
+    echo "Device already exists.\n";
 } else {
-    $device_str = "device_id, latitude, longitude";
-    $data_str = "'$device_id', '$latitude', '$longitude'";
+    $device_str = "device_id, passkey_hash, latitude, longitude";
+    $data_str = "'$device_id', '$passkey_hash', '$latitude', '$longitude'";
 
     $sql = "INSERT INTO device ".
         "(" . $device_str . ")".
@@ -60,7 +61,7 @@ if ($rows->num_rows > 0) {
         "(" . $data_str  . ")";
 
     if ($mysqli -> query($sql) == TRUE) {
-        echo "New record created successfully";
+        echo "New record created successfully.\n";
     } else {
         echo "Error: " . $sql . "<br>" . $mysqli -> error;
     }

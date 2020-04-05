@@ -1,5 +1,6 @@
 {
     "device_id": 99999,
+    "passkey": "XXXXXXXXXXXXXXXX",
     "latitude": 43.258687,
     "longitude": -79.919961,
     "sensors": [

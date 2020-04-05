@@ -29,6 +29,7 @@ function ExtendedAddslash(&$params)
 ExtendedAddslash($_POST);
 
 $device_id =$_POST['device_id'];
+$passkey_hash =$_POST['passkey_hash'];
 $time =$_POST['time'];
 $temperature =$_POST['temperature'];
 $humidity =$_POST['humidity'];
@@ -51,6 +52,15 @@ if($mysqli -> connect_errno) {
 }
 
 $mysqli -> select_db($db_name);
+
+$rows = $mysqli -> query("SELECT * FROM device WHERE device_id = '$device_id' AND passkey_hash = '$passkey_hash'");
+if ($rows->num_rows > 0) {
+    echo("Passkey match, proceed to insert.\n");
+} elseif ($rows->num_rows > 1) {
+    echo("Multiple devices found with the same device_id.\n");
+} else {
+    echo("Passkey does not match or device does not exist.\n");
+}
 
 $device_str = "device_id, time";
 $data_str = "'$device_id', '$time'";
@@ -90,9 +100,9 @@ $sql = "INSERT INTO data ".
     "(" . $data_str  . ")";
 
 if ($mysqli -> query($sql) == TRUE) {
-    echo "New record created successfully";
+    echo "New record created successfully\n";
 } else {
-    echo "Error: " . $sql . "<br>" . $mysqli -> error;
+    echo "Error: " . $sql . "\n" . $mysqli -> error;
 }
 
 $mysqli ->close();
