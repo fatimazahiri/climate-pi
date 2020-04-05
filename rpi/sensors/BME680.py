@@ -67,10 +67,6 @@ class BME680(BME680Data):
         self.set_filter(BME_CONST.FILTER_SIZE_3)
         self.set_gas_status(BME_CONST.ENABLE_GAS_MEAS)
         self.set_temp_offset(0)
-        self.set_gas_heater_temperature(320)
-        self.set_gas_heater_duration(150)
-        self.select_gas_heater_profile(0)
-
         self.get_sensor_data()
 
     def _get_calibration_data(self):
