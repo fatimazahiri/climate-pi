@@ -1,12 +1,28 @@
+#!/usr/bin/python3
+
+# Copyright (C) 2020  Connor Czarnuch, Daniel Di Cesare, with use
+# of pimoroni BME680 library by Philip Howard.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 """BME680 Temperature, Pressure, Humidity & Gas Sensor."""
 from BME_CONST import lookupTable1, lookupTable2
 from BME_CONST import BME680Data
 import BME_CONST
 import math
 import time
-
-__version__ = '1.0.5'
-
+import I2C
 
 # Export BME_CONST to global namespace
 # so end-users can "from BME680 import NAME"
@@ -16,26 +32,25 @@ if hasattr(BME_CONST, '__dict__'):
         if key not in globals():
             globals()[key] = value
 
+BME680_ADDR = 0x77
+I2C_CHANNEL = 1
 
 class BME680(BME680Data):
     """BOSCH BME680.
     Gas, pressure, temperature and humidity sensor.
-    :param i2c_addr: One of I2C_ADDR_PRIMARY (0x76) or I2C_ADDR_SECONDARY (0x77)
-    :param i2c_device: Optional smbus or compatible instance for facilitating i2c communications.
+    :param address: One of I2C_ADDR_PRIMARY (0x76) or I2C_ADDR_SECONDARY (0x77)
+    :param i2c_ch: Which I2C channel to use on the raspberry pi.
     """
 
-    def __init__(self, i2c_addr=BME_CONST.I2C_ADDR_SECONDARY, i2c_device=None):
+    def __init__(self, address=BME680_ADDR, i2c_ch=I2C_CHANNEL):
         """Initialise BME680 sensor instance and verify device presence.
-        :param i2c_addr: i2c address of BME680
+        :param address: i2c address of BME680
         :param i2c_device: Optional SMBus-compatible instance for i2c transport
         """
         BME680Data.__init__(self)
 
-        self.i2c_addr = i2c_addr
-        self._i2c = i2c_device
-        if self._i2c is None:
-            import smbus
-            self._i2c = smbus.SMBus(1)
+        self.address = address
+        self._device = I2C.Device(address, i2c_ch)
 
         self.chip_id = self._get_regs(BME_CONST.CHIP_ID_ADDR, 1)
         if self.chip_id != BME_CONST.CHIP_ID:
@@ -272,16 +287,16 @@ class BME680(BME680Data):
     def _set_regs(self, register, value):
         """Set one or more registers."""
         if isinstance(value, int):
-            self._i2c.write_byte_data(self.i2c_addr, register, value)
+            self._device.write8(register, value)
         else:
-            self._i2c.write_i2c_block_data(self.i2c_addr, register, value)
+            self._device.writeList(register, value)
 
     def _get_regs(self, register, length):
         """Get one or more registers."""
         if length == 1:
-            return self._i2c.read_byte_data(self.i2c_addr, register)
+            return self._device.readU8(register)
         else:
-            return self._i2c.read_i2c_block_data(self.i2c_addr, register, length)
+            return self._device.readList(register, length)
 
     def _calc_temperature(self, temperature_adc):
         """Convert the raw temperature to degrees C using calibration_data."""
@@ -386,6 +401,19 @@ class BME680(BME680Data):
             return int(duration + (factor * 64))
 
         return 0xff
+
+    def readAll(self, temperature=True, humidity=True, pressure=True, gas=True):
+        if self.get_sensor_data():
+            data = {}
+            if temperature:
+                data['temperature'] = self.data.temperature
+            if humidity:
+                data['humidity'] = self.data.humidity
+            if pressure:
+                data['pressure'] = self.data.pressure
+            if gas and self.data.heat_stable:
+                data['gas'] = self.data.gas_resistance
+            return data
     
     def test(self):
         status = self.get_sensor_data()
@@ -393,45 +421,10 @@ class BME680(BME680Data):
             return True
         else:
             return False
-    
 
-    def readAll(self, temp=True, gas=True, humidity=True, pressure=False):
-        data = {}
-        
-        self.get_sensor_data()
-        
-        if temp:
-            data['temp'] = self.data.temperature
-        if gas:
-            data['gas'] = self.data.gas_resistance
-            if (self.data.gas_resistance < 18761):
-                data['gas_status'] = "Terrible"
-            elif (self.data.gas_resistance < 37395):
-                data['gas_status'] = "Very Bad"
-            elif (self.data.gas_resistance < 75010):
-                data['gas_status'] = "Bad"
-            elif (self.data.gas_resistance < 148977):
-                data['gas_status'] = "Below Average"
-            elif (self.data.gas_resistance < 297625):
-                data['gas_status'] = "Average"
-            else:
-                data['gas_status'] = "Good"
-                
-        if humidity:
-            data['humidity'] = self.data.humidity
-        if pressure:
-            daata['pressure'] = self.data.pressure
-        return data
-    
-def create():
-    sensor = BME680()
+
+def create(i2c_address=BME680_ADDR, i2c_channel=I2C_CHANNEL):
+    sensor = BME680(i2c_address, i2c_channel)
     if not sensor.test():
         raise Exception
     return sensor
-    
-
-sensor = create()
-data = sensor.readAll()
-print(data)
-        
-        

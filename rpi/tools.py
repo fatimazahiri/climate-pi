@@ -29,7 +29,7 @@ import sys
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir+"/sensors")
 
-# import BME680
+import BME680
 import SMPWM01C
 import Si1145
 
@@ -100,7 +100,7 @@ def sensor_switch(sensor, address):
         Object -- Object containing the sensor data.
     """
     sensor_dict = {
-        # "BME680": BME680,
+        "BME680": BME680,
         "Si1145": Si1145,
         "SMPWM01C": SMPWM01C
     }
