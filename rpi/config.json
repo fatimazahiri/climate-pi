@@ -5,6 +5,10 @@
     "longitude": -79.919961,
     "sensors": [
         {
+            "name": "BME680",
+            "address": "0x77"
+        },
+        {
             "name": "Si1145",
             "address": "0x60"
         }
