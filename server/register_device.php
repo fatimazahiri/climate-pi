@@ -50,7 +50,7 @@ $mysqli -> select_db($db_name);
 $rows = $mysqli -> query("SELECT * FROM device WHERE device_id = '$device_id'");
 
 if ($rows->num_rows > 0) {
-    echo "Device already exists.";
+    echo "Device already exists.\n";
 } else {
     $device_str = "device_id, passkey_hash, latitude, longitude";
     $data_str = "'$device_id', '$passkey_hash', '$latitude', '$longitude'";
@@ -61,7 +61,7 @@ if ($rows->num_rows > 0) {
         "(" . $data_str  . ")";
 
     if ($mysqli -> query($sql) == TRUE) {
-        echo "New record created successfully";
+        echo "New record created successfully.\n";
     } else {
         echo "Error: " . $sql . "<br>" . $mysqli -> error;
     }
