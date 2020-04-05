@@ -56,12 +56,14 @@ $mysqli -> select_db($db_name);
 $rows = $mysqli -> query("SELECT * FROM device WHERE device_id = '$device_id' AND passkey_hash = '$passkey_hash'");
 if ($rows->num_rows > 0) {
     echo("Passkey match, proceed to insert.");
+} elseif ($rows->num_rows > 1) {
+    echo("Multiple devices found with the same device_id.");
 } else {
     echo("Passkey does not match or device does not exist.");
 }
 
-$device_str = "device_id, passkey_hash, time";
-$data_str = "'$device_id', '$passkey_hash', '$time'";
+$device_str = "device_id, time";
+$data_str = "'$device_id', '$time'";
 
 if ($temperature != NULL) {
     $device_str .= ", temperature";

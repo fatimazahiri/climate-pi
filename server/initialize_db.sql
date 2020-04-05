@@ -29,7 +29,6 @@ create table device
 create table data
 (
     device_id char(5) not null,
-    passkey_hash char(64) not null,
     time int not null,
     temperature float,
     humidity float,
@@ -39,8 +38,7 @@ create table data
     pm_25 float,
     pm_10 float,
     primary key (device_id, time),
-    foreign key (device_id) references device(device_id) on delete cascade,
-    foreign key (passkey_hash) references device(passkey_hash) on delete cascade
+    foreign key (device_id) references device(device_id) on delete cascade
 );
 
 -- Can change password
