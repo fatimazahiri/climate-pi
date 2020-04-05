@@ -15,11 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-# import BME680
-import SMPWM01C
-import Si1145
 import json
 import re
+import hashlib
 import time
 import urllib.request
 import requests
@@ -30,6 +28,10 @@ import sys
 # workaround to import from sensor directory, sorry
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir+"/sensors")
+
+# import BME680
+import SMPWM01C
+import Si1145
 
 
 def load_config(path="config.json"):
@@ -59,7 +61,7 @@ def load_config(path="config.json"):
 
             # Format config entries
             device_id = ("%05d" % device_id)
-            passkey_hash = hash(passkey + device_id) % ((sys.maxsize + 1) * 2)
+            passkey_hash = hashlib.sha256(passkey.encode("UTF-8")).hexdigest()
             latitude = ("%.6f" % latitude)
             longitude = ("%.6f" % longitude)
 
@@ -114,7 +116,7 @@ def import_sensors(config):
     """
     sensorList = []
     for key in config.keys():
-        if key in ("device_id", "latitude", "longitude"):
+        if key in ("device_id", "passkey_hash", "latitude", "longitude"):
             continue
         else:
             addr = int(config[key], 16)
