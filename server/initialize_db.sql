@@ -29,7 +29,7 @@ create table device
 create table data
 (
     device_id char(5) not null,
-    passkey_hash char(16) not null,
+    passkey_hash char(64) not null,
     time int not null,
     temperature float,
     humidity float,
