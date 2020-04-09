@@ -17,24 +17,23 @@
 
 
 # workaround to import from parent directory
-import time
-import os
-import sys
-import inspect
-current_dir = os.path.dirname(os.path.abspath(
-    inspect.getfile(inspect.currentframe())))
+import os,sys,inspect
+current_dir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir = os.path.dirname(current_dir)
-sys.path.insert(0, parent_dir)
+sys.path.insert(0, parent_dir) 
 
+import time
 import Si1145
+
 
 sensor = Si1145.SI1145()
 
 while True:
-    data = sensor.readAll()
-
-    for key in data.keys():
-        assert(data[key] is not None), print("Test fail, value returned None")
-        print(key + ": " + str(data[key]))
-
-    time.sleep(1)
+        vis = sensor.readVisible()
+        IR = sensor.readIR()
+        UV = sensor.readUV()
+        uvIndex = UV / 100.0
+        print('Vis:\t'      + str(vis))
+        print('IR:\t'       + str(IR))
+        print('UV Index:\t' + str(uvIndex) + '\n')
+        time.sleep(1)
