@@ -97,7 +97,7 @@ def sensor_switch(sensor, address):
         address {int} -- Integer representing the I2C address of the sensor.
 
     Returns:
-        Object -- Object containing the sensor data.
+        sensor -- Object containing the sensor data.
     """
     sensor_dict = {
         "BME680": BME680,
@@ -112,7 +112,7 @@ def import_sensors(config):
     """Imports sensor libraries and sensor objects from a config file.
 
     Returns:
-        [list, list] -- Two lists of modules and sensor objects.
+        list of sensor -- List containing sensor objects from config file.
     """
     sensorList = []
     for key in config.keys():
@@ -131,7 +131,7 @@ def format_dict(dictList):
         dictList {[dict]} -- List of dictionaries.
 
     Returns:
-        dict -- Super dictionary.
+        dict -- Combined dictionary.
     """
     newDict = {}
     for i in dictList:
@@ -147,7 +147,7 @@ def send_data_to_server(url, data):
         data {dict} -- Dictionary containing keys and values to send to server.
 
     Returns:
-        str -- Response code pertaining to data send.
+        str -- Response code pertaining to data sent.
     """
     response = requests.post(url, data=data)
     return response.text
