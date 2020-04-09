@@ -26,9 +26,9 @@ current_dir = os.path.dirname(os.path.abspath(
 parent_dir = os.path.dirname(current_dir)
 sys.path.insert(0, parent_dir)
 
-import Si1145
+import BME680
 
-sensor = Si1145.SI1145()
+sensor = BME680.BME680()
 
 while True:
     data = sensor.readAll()
