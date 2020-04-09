@@ -15,23 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import json
-import re
 import hashlib
-import time
-import urllib.request
-import requests
-from bs4 import BeautifulSoup
-
+import json
 import os
+import re
 import sys
+import time
+
+import requests
+from gpiozero import LED
+
 # workaround to import from sensor directory, sorry
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir+"/sensors")
 
 import BME680
-import SMPWM01C
 import Si1145
+import SMPWM01C
+
+error_led = LED(17)
 
 
 def load_config(path="config.json"):
@@ -83,10 +85,10 @@ def load_config(path="config.json"):
     except IOError as e:
         print("Incorrect file path, does the config file exist?\n")
         print(e)
-        return
+        error_handler()
     except ValueError as e:
         print("Incorrect format for device_id or GPS coordinates! Are they there? Are they valid?")
-        return
+        error_handler()
 
 
 def sensor_switch(sensor, address):
@@ -153,28 +155,6 @@ def send_data_to_server(url, data):
     return response.text
 
 
-def get_data_from_server(url):
-    """Retrieves lines of text from a simple php or html file.
-
-    Arguments:
-        url {str} -- The required server url to download from.
-
-    Returns:
-        arr[str] -- Array containing text from website.
-    """
-    response = urllib.request.urlopen(url)
-    html = response.read()
-    soup = BeautifulSoup(html, "html.parser")
-    # get text
-    text = soup.get_text()
-    text = text.split('\n')
-    newText = []
-    for line in text:
-        if line != '':
-            newText.append(line.strip())
-    return newText
-
-
 def force_sync_time(unix_time):
     """Set the raspberry time to the unix time given as parameter.
 
@@ -190,4 +170,11 @@ def force_sync_time(unix_time):
     except Exception as e:
         print("Unable to set clock time.")
         print(e)
-        return False
+        error_handler()
+
+
+def error_handler():
+    """LED on at error."""
+    error_led.on()
+    while True:
+        pass

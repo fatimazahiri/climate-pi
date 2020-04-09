@@ -17,8 +17,8 @@
 
 import os
 import time
-import tools
 
+import tools
 
 CONFIG_FILE = os.getcwd() + '/config.json'
 REGISTER_DEVICE_URL = 'http://serverpi/register_device.php'
@@ -26,6 +26,7 @@ ADD_DATA_URL = 'http://serverpi/add_data.php'
 
 
 def main():
+    tools.error_led.off()
     config = tools.load_config(CONFIG_FILE)
     print(config)
     device_info = {
