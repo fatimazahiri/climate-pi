@@ -30,7 +30,10 @@ sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"
 
 sudo apt-get install grafana -y
 
-echo "Restart services"
-sudo service apache2 restart
 sudo systemctl enable grafana-server
 sudo systemctl start grafana-server
+
+echo "Restart services"
+sudo service mysql restart
+sudo service apache2 restart
+sudo service grafana restart
