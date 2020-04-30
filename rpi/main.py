@@ -20,9 +20,12 @@ import time
 
 import tools
 
+server_address = 'connor-jetson'
+debug = True
+
 CONFIG_FILE = os.getcwd() + '/config.json'
-REGISTER_DEVICE_URL = 'http://serverpi/register_device.php'
-ADD_DATA_URL = 'http://serverpi/add_data.php'
+REGISTER_DEVICE_URL = 'http://'+server_address+'/register_device.php'
+ADD_DATA_URL = 'http://'+server_address+'/add_data.php'
 
 
 def main():
