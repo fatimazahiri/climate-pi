@@ -32,6 +32,7 @@ sudo apt-get install grafana -y
 
 sudo systemctl enable grafana-server
 sudo systemctl start grafana-server
+sudo grafana-cli plugins install grafana-worldmap-panel
 
 echo "Restart services"
 sudo service mysql restart
