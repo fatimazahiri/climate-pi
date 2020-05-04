@@ -4,7 +4,25 @@
         <meta charset="utf-8">
         <title>Sensor Additions</title>
         <style>
+            table input[type="submit"] {
+                display: block;
+                margin: 0 auto;
+            }
+            [type="checkbox"] {
+                vertical-align:middle;
+            }
+            p {
+                text-align: center;
+            }
+            body {
+                background-image: url('backdrop.jpg');
+                background-repeat: no-repeat;
+                background-size: cover;
+
+            }
             form {
+                
+                background-color: whitesmoke;
                 margin: 0 auto;
                 width: 400px;
                 padding: 1em;
@@ -24,8 +42,12 @@
 
                 label {
                 display: inline-block;
-                width: 90px;
+                width: 120px;
                 text-align: right;
+                }
+
+                [type="checkbox"] {
+                vertical-align:middle;
                 }
 
                 input, 
@@ -34,7 +56,7 @@
                 font: 1em sans-serif;
 
                 /* Uniform text field size */
-                width: 300px;
+                /*width: 300px;*/
                 box-sizing: border-box;
 
                 /* Match form field borders */
@@ -75,16 +97,41 @@
                     <input type="email" id="mail" name="user_email">
                 </li>
                 <li>
-                    <label for="latitude">Location</label>
+                    <label for="latitude">Latitude</label>
                     <input type="text" id="latitude" name="user_lat">
                 </li>
                 <li>
-                    <label for="longitude">Location</label>
+                    <label for="longitude">Longitude</label>
                     <input type="text" id="longitude" name="user_long">
                 </li>
-                <li class="button">
-                    <button type="submit">Send Data</button>
+
+                <p>Sensors: Check all that apply.</p>
+                <li>
+                    
+                        <label for="checkid1"  style="word-wrap:break-word">
+                        <input id="checkid1"  name = "A" type="checkbox" value="BME680" />BME680
+                        </label>
+
+                        <label for="checkid2"  style="word-wrap:break-word">
+                            <input id="checkid2" name = "B" type="checkbox" value="SMPWM01C" />SMPWM01C
+                        </label>
+
+                        <label for="checkid3"  style="word-wrap:break-word">
+                            <input id="checkid3"  name = "C"  type="checkbox" value="Si1145" />Si1145
+                        </label>
+                    
                 </li>
+
+                <center>
+                <table>
+                    <tr>
+                        <button type="submit">Send Data</button>
+                    </tr>
+                </table>
+               </center>
+
+
+                
             </ul>
         </form>
         <p>Need to find your location? - Check <a href="https://www.latlong.net/">here</a></p>
