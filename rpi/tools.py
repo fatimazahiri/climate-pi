@@ -154,6 +154,7 @@ def send_data_to_server(url, data):
     response = requests.post(url, data=data)
     if response.status_code != 200:
         print("Unable to send data to server ")
+        error_handler()
     return response.text
 
 

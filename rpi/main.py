@@ -17,11 +17,20 @@
 
 import os
 import time
+import argparse
 
 import tools
 
-server_address = 'connor-jetson'
-debug = True
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--debug", help="display debug statements")
+parser.add_argument("--server", help="add custom server address")
+args = parser.parse_args()
+
+if args.server:
+    server_address = args.server
+else:
+    server_address = 'connor-jetson'
 
 CONFIG_FILE = os.getcwd() + '/config.json'
 REGISTER_DEVICE_URL = 'http://'+server_address+'/register_device.php'
@@ -31,7 +40,8 @@ ADD_DATA_URL = 'http://'+server_address+'/add_data.php'
 def main():
     tools.error_led.off()
     config = tools.load_config(CONFIG_FILE)
-    print(config)
+    if args.debug:
+        print(config)
     device_info = {
         "device_id": config["device_id"],
         "passkey_hash": config["passkey_hash"],
@@ -40,7 +50,9 @@ def main():
     }
 
     # Check if device is registered
-    print(tools.send_data_to_server(REGISTER_DEVICE_URL, device_info))
+    send_data = tools.send_data_to_server(REGISTER_DEVICE_URL, device_info)
+    if args.debug:
+        print(send_data)
 
     # Remove positional variables as they are no longer needed
     device_info.pop("latitude")
@@ -50,7 +62,8 @@ def main():
     sensorList = tools.import_sensors(config)
 
     nextTime = int(get_new_time())
-    print(int(time.time()), nextTime)
+    if args.debug:
+        print(int(time.time()), nextTime)
 
     while True:
         while time.time() < nextTime:
@@ -64,11 +77,14 @@ def main():
 
         # Send data to server
         print(dataToSend)
-        print(tools.send_data_to_server(ADD_DATA_URL, dataToSend))
+        send_data = tools.send_data_to_server(ADD_DATA_URL, dataToSend)
+        if args.debug:
+            print(send_data)
 
         # Calculate next time to retrieve information
         nextTime = int(get_new_time())
-        print(int(time.time()), nextTime)
+        if args.debug:
+            print(int(time.time()), nextTime)
 
         # sync from time server
 
