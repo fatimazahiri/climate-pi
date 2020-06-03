@@ -41,5 +41,4 @@
     }
 
 
-  //echo  $user_name, ' ', $user_email;
 ?>

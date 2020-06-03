@@ -1,141 +1,52 @@
-<!DOCTYPE html>
-<html lang="en-US">
-    <head>
-        <meta charset="utf-8">
-        <title>Sensor Additions</title>
-        <style>
-            table input[type="submit"] {
-                display: block;
-                margin: 0 auto;
-            }
-            [type="checkbox"] {
-                vertical-align:middle;
-            }
-            p {
-                text-align: center;
-            }
-            body {
-                background-image: url('backdrop.jpg');
-                background-repeat: no-repeat;
-                background-size: cover;
+<link rel="stylesheet" type="text/css" href="style.css" media="screen"/>
 
-            }
-            form {
-                
-                background-color: whitesmoke;
-                margin: 0 auto;
-                width: 400px;
-                padding: 1em;
-                border: 1px solid #CCC;
-                border-radius: 1em;
-                }
+<style>
+  a:link {
+    color: #e0fbfc;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:visited {
+    color: pink;
+    background-color: transparent;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: #e63946;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  
+  a:active {
+    color: yellow;
+    background-color: transparent;
+    text-decoration: underline;
+  }
+  </style> 
 
-                ul {
-                list-style: none;
-                padding: 0;
-                margin: 0;
-                }
-
-                form li + li {
-                margin-top: 1em;
-                }
-
-                label {
-                display: inline-block;
-                width: 120px;
-                text-align: right;
-                }
-
-                [type="checkbox"] {
-                vertical-align:middle;
-                }
-
-                input, 
-                textarea {
-             
-                font: 1em sans-serif;
-
-                /* Uniform text field size */
-                /*width: 300px;*/
-                box-sizing: border-box;
-
-                /* Match form field borders */
-                border: 1px solid #999;
-                }
-
-                input:focus, 
-                textarea:focus {
-                border-color: #000;
-                }
-
-                textarea {
-                vertical-align: top;
-
-                height: 5em;
-                }
-
-                .button {
-                padding-left: 90px; 
-                }
-
-                button {
-                margin-left: .5em;
-            }
-        </style>
-    </head>
-    <body>
-        <p>Add a new device here!</p>
-
-        <form action="handle.php" method ="post">
-            <ul>
-                <li>
-                    <label for="name">Name</label>
-                    <input type="text" id="name" name="user_name">
-                </li>
-                <li>
-                    <label for="mail">E-mail</label>
-                    <input type="email" id="mail" name="user_email">
-                </li>
-                <li>
-                    <label for="latitude">Latitude</label>
-                    <input type="text" id="latitude" name="user_lat">
-                </li>
-                <li>
-                    <label for="longitude">Longitude</label>
-                    <input type="text" id="longitude" name="user_long">
-                </li>
-
-                <p>Sensors: Check all that apply.</p>
-                <li>
-                    
-                        <label for="checkid1"  style="word-wrap:break-word">
-                        <input id="checkid1"  name = "A" type="checkbox" value="BME680" />BME680
-                        </label>
-
-                        <label for="checkid2"  style="word-wrap:break-word">
-                            <input id="checkid2" name = "B" type="checkbox" value="SMPWM01C" />SMPWM01C
-                        </label>
-
-                        <label for="checkid3"  style="word-wrap:break-word">
-                            <input id="checkid3"  name = "C"  type="checkbox" value="Si1145" />Si1145
-                        </label>
-                    
-                </li>
-
-                <center>
-                <table>
-                    <tr>
-                        <button type="submit">Send Data</button>
-                    </tr>
-                </table>
-               </center>
-
-
-                
-            </ul>
-        </form>
-        <p>Need to find your location? - Check <a href="https://www.latlong.net/">here</a></p>
-    </body>
+<form action="handle.php" method ="post">      
+    <input id="name" name="user_name" type="text" class="feedback-input" placeholder="Name"/>   
+    <input id="mail" name="user_email" type="email" class="feedback-input" placeholder="Email" />
     
+    
+      <input id="latitude" name="user_lat" type="text" class="split" placeholder="Latitude"/>   
+      <input id="longitude" name="user_long" type="text" class="split" placeholder="Longitude"/>
+    <p class="para">Need to find your location? - Check <a href="https://www.latlong.net/">here</a></p>
+    <p class="para">Sensors: Check all that apply.</p>
 
-</html>
+      <label for="checkid1" class="sensor">
+        <input id="checkid1"  name = "A" type="checkbox" value="BME680" />BME680
+      </label>
+      <label for="checkid2"  class="sensor">
+        <input id="checkid2" name = "B" type="checkbox" value="SMPWM01C" />SMPWM01C
+      </label>
+      <label for="checkid3"  class="sensor">
+        <input id="checkid3"  name = "C"  type="checkbox" value="Si1145" />Si1145
+      </label>
+
+
+      <input class="space"/>     
+    <input type="submit" value="SUBMIT"/>
+  </form>
