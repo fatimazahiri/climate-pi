@@ -15,23 +15,25 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import json
-import re
 import hashlib
-import time
-import urllib.request
-import requests
-from bs4 import BeautifulSoup
-
+import json
 import os
+import re
 import sys
+import time
+
+import requests
+from gpiozero import LED
+
 # workaround to import from sensor directory, sorry
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir+"/sensors")
 
 import BME680
-import SMPWM01C
 import Si1145
+import SMPWM01C
+
+error_led = LED(17)
 
 
 def load_config(path="config.json"):
@@ -83,10 +85,10 @@ def load_config(path="config.json"):
     except IOError as e:
         print("Incorrect file path, does the config file exist?\n")
         print(e)
-        return
+        error_handler()
     except ValueError as e:
         print("Incorrect format for device_id or GPS coordinates! Are they there? Are they valid?")
-        return
+        error_handler()
 
 
 def sensor_switch(sensor, address):
@@ -97,7 +99,7 @@ def sensor_switch(sensor, address):
         address {int} -- Integer representing the I2C address of the sensor.
 
     Returns:
-        Object -- Object containing the sensor data.
+        sensor -- Object containing the sensor data.
     """
     sensor_dict = {
         "BME680": BME680,
@@ -112,7 +114,7 @@ def import_sensors(config):
     """Imports sensor libraries and sensor objects from a config file.
 
     Returns:
-        [list, list] -- Two lists of modules and sensor objects.
+        list of sensor -- List containing sensor objects from config file.
     """
     sensorList = []
     for key in config.keys():
@@ -131,7 +133,7 @@ def format_dict(dictList):
         dictList {[dict]} -- List of dictionaries.
 
     Returns:
-        dict -- Super dictionary.
+        dict -- Combined dictionary.
     """
     newDict = {}
     for i in dictList:
@@ -147,32 +149,13 @@ def send_data_to_server(url, data):
         data {dict} -- Dictionary containing keys and values to send to server.
 
     Returns:
-        str -- Response code pertaining to data send.
+        str -- Response code pertaining to data sent.
     """
     response = requests.post(url, data=data)
+    if response.status_code != 200:
+        print("Unable to send data to server ")
+        error_handler()
     return response.text
-
-
-def get_data_from_server(url):
-    """Retrieves lines of text from a simple php or html file.
-
-    Arguments:
-        url {str} -- The required server url to download from.
-
-    Returns:
-        arr[str] -- Array containing text from website.
-    """
-    response = urllib.request.urlopen(url)
-    html = response.read()
-    soup = BeautifulSoup(html, "html.parser")
-    # get text
-    text = soup.get_text()
-    text = text.split('\n')
-    newText = []
-    for line in text:
-        if line != '':
-            newText.append(line.strip())
-    return newText
 
 
 def force_sync_time(unix_time):
@@ -190,4 +173,11 @@ def force_sync_time(unix_time):
     except Exception as e:
         print("Unable to set clock time.")
         print(e)
-        return False
+        error_handler()
+
+
+def error_handler():
+    """LED on at error."""
+    error_led.on()
+    while True:
+        pass
