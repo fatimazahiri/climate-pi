@@ -45,6 +45,16 @@ The default time set for data transmission is every 5 minutes.
 
 If any problems are encountered while transmitting data, a red LED will light up on the specified GPIO pin.
 
+## Hardware
+
+For assembly, follow the schematic below. Design requires 2x 2K resistor + 2x 3K resistor.
+
+![Schematic](https://github.com/Beasley-Neighbourhood-Association/climate-pi/blob/master/Design/climatepi_bb.png)
+
+## Timeline
+
+![Timeline](https://github.com/Beasley-Neighbourhood-Association/climate-pi/blob/master/Design/download.png)
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
