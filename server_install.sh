@@ -18,7 +18,7 @@ echo "Running MySQL config..."
 sudo mysql_secure_installation
 
 echo "Initialize database"
-mysql -u root -p < server/initialize_db.sql
+sudo mysql -u root -p < server/initialize_db.sql
 echo "Database is initialized!"
 
 echo "Install Grafana"
@@ -37,4 +37,4 @@ sudo grafana-cli plugins install grafana-worldmap-panel
 echo "Restart services"
 sudo service mysql restart
 sudo service apache2 restart
-sudo service grafana restart
+sudo service grafana-server restart
